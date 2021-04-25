@@ -1,0 +1,38 @@
+{
+  "private": true,
+  "scripts": {
+    "build:bridge:macos": "node scripts/build_darwin_dylib",
+    "build:bridge:macos:release": "KRAKEN_BUILD=Release node scripts/build_darwin_dylib",
+    "build:bridge:android": "node scripts/build_android_so",
+    "build:bridge:android:release": "KRAKEN_BUILD=Release node scripts/build_android_so",
+    "build:bridge:ios": "node scripts/build_ios_framework",
+    "build:bridge:ios:release": "KRAKEN_BUILD=Release node scripts/build_ios_framework",
+    "build:bridge:all": "node scripts/prepare_kraken_release_binary",
+    "build:bridge:all:release": "KRAKEN_BUILD=Release node scripts/prepare_kraken_release_binary",
+    "build:android:sdk": "KRAKEN_BUILD=Release node scripts/build_android_sdk",
+    "build:ios:sdk": "KRAKEN_BUILD=Release node scripts/build_ios_sdk",
+    "pretest": "npm install && npm run lint && ENABLE_PROFILE=true node scripts/build_darwin_dylib",
+    "start": "cd kraken/example && flutter run",
+    "test": "node scripts/run_test.js",
+    "lint": "cd kraken && flutter analyze",
+    "format": "cd kraken && flutter format . --line-length=120",
+    "ci": "npm install && npm run lint"
+  },
+  "devDependencies": {
+    "ali-oss": "^6.13.2",
+    "archiver": "^5.3.0",
+    "chalk": "^3.0.0",
+    "commander": "^5.1.0",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "minimist": "^1.2.4",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^3.0.2",
+    "uuid": "^8.3.2",
+    "ws": "^7.3.0"
+  },
+  "dependencies": {
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "rollup": "^2.45.2"
+  }
+}

@@ -1,0 +1,48 @@
+name: kraken
+description: A high-performance, web standards-compliant rendering engine.
+version: 0.7.1
+homepage: https://openkraken.com
+
+environment:
+  sdk: ">=2.8.0 <3.0.0"
+  flutter: "^1.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path: ^1.6.4
+  meta: ^1.1.6
+  ffi: ^1.0.0
+  connectivity: ^0.4.8
+  shared_preferences: ^0.5.6
+  device_info: ^0.4.1 # Only support iOS and Android.
+  path_provider: ^1.1.0
+  dio: ^3.0.9
+  vector_math: ^2.0.8
+  characters: ^1.0.0
+  vibration: ^1.4.0
+
+dev_dependencies:
+  effective_dart: ^1.2.1
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  # This section identifies this Flutter project as a plugin project.
+  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
+  # be modified. They are used by the tooling to maintain consistency when
+  # adding or updating assets for this project.
+  #
+  # NOTE: This new plugin description format is not supported on Flutter's
+  # stable channel as of 1.9.1. A plugin published using this format will not
+  # work for most clients until the next major stable release.
+  # However, it is required in order to declare macOS support.
+  plugin:
+    platforms:
+      android:
+        package: com.openkraken.kraken
+        pluginClass: KrakenPlugin
+      ios:
+        pluginClass: KrakenPlugin
+      macos:
+        pluginClass: KrakenPlugin
