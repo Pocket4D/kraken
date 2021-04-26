@@ -1,22 +1,17 @@
-require('./tasks');
-const chalk = require('chalk');
-const { series } = require('gulp');
-const os = require('os');
+require("./tasks");
+const chalk = require("chalk");
+const { series } = require("gulp");
+const os = require("os");
 
-let buildTasks = [
-  'sdk-clean',
-  'compile-polyfill',
-  'build-android-kraken-lib',
-];
+let buildTasks = ["sdk-clean", "compile-polyfill", "build-android-kraken-lib"];
 
-if (os.platform() == 'win32') {
-  buildTasks.push(
-    'patch-windows-symbol-link-for-android'
-  );
+if (os.platform() == "win32") {
+  buildTasks.push("patch-windows-symbol-link-for-android");
 } else {
   buildTasks.push(
-    'build-darwin-kraken-lib',
-    'build-ios-kraken-lib',
+    "build-darwin-kraken-lib",
+    "build-ios-kraken-lib",
+    "symbol-link-for-android"
   );
 }
 
@@ -24,6 +19,6 @@ series(buildTasks)((err) => {
   if (err) {
     console.log(err);
   } else {
-    console.log(chalk.green('Success.'));
+    console.log(chalk.green("Success."));
   }
 });

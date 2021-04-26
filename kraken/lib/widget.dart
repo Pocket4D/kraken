@@ -53,69 +53,67 @@ class Kraken extends StatelessWidget {
 
   final GestureClient gestureClient;
 
+  KrakenController _controller;
+
   KrakenController get controller {
-    return KrakenController.getControllerOfName(shortHash(this));
+    return _controller != null
+        ? _controller
+        : _controller = KrakenController.getControllerOfName(shortHash(this));
   }
 
   loadContent(String bundleContent) async {
     if (bundleContent == null) return;
     await controller.unload();
-    await controller.loadBundle(
-      bundleContent: bundleContent
-    );
-    _evalBundle(controller, animationController);
+    await controller.loadBundle(bundleContent: bundleContent);
+    await _evalBundle(controller, animationController);
   }
 
   loadURL(String bundleURL) async {
     if (bundleURL == null) return;
     await controller.unload();
-    await controller.loadBundle(
-      bundleURL: bundleURL
-    );
-    _evalBundle(controller, animationController);
+    await controller.loadBundle(bundleURL: bundleURL);
+    await _evalBundle(controller, animationController);
   }
 
   loadPath(String bundlePath) async {
     if (bundlePath == null) return;
     await controller.unload();
-    await controller.loadBundle(
-      bundlePath: bundlePath
-    );
-    _evalBundle(controller, animationController);
+    await controller.loadBundle(bundlePath: bundlePath);
+    await _evalBundle(controller, animationController);
   }
 
   reload() async {
     await controller.reload();
   }
 
-  Kraken({
-    Key key,
-    this.viewportWidth,
-    this.viewportHeight,
-    this.bundleURL,
-    this.bundlePath,
-    this.bundleContent,
-    this.onLoad,
-    this.navigationDelegate,
-    this.javaScriptChannel,
-    this.background,
-    this.gestureClient,
-    // Kraken's viewportWidth options only works fine when viewportWidth is equal to window.physicalSize.width / window.devicePixelRatio.
-    // Maybe got unexpected error when change to other values, use this at your own risk!
-    // We will fixed this on next version released. (v0.6.0)
-    // Disable viewportWidth check and no assertion error report.
-    bool disableViewportWidthAssertion = false,
-    // Kraken's viewportHeight options only works fine when viewportHeight is equal to window.physicalSize.height / window.devicePixelRatio.
-    // Maybe got unexpected error when change to other values, use this at your own risk!
-    // We will fixed this on next version release. (v0.6.0)
-    // Disable viewportHeight check and no assertion error report.
-    bool disableViewportHeightAssertion = false,
-    // Callback functions when loading Javascript scripts failed.
-    this.onLoadError,
-    this.animationController,
-    this.debugEnableInspector,
-    this.onJSError
-  }) : super(key: key);
+  Kraken(
+      {Key key,
+      this.viewportWidth,
+      this.viewportHeight,
+      this.bundleURL,
+      this.bundlePath,
+      this.bundleContent,
+      this.onLoad,
+      this.navigationDelegate,
+      this.javaScriptChannel,
+      this.background,
+      this.gestureClient,
+      // Kraken's viewportWidth options only works fine when viewportWidth is equal to window.physicalSize.width / window.devicePixelRatio.
+      // Maybe got unexpected error when change to other values, use this at your own risk!
+      // We will fixed this on next version released. (v0.6.0)
+      // Disable viewportWidth check and no assertion error report.
+      bool disableViewportWidthAssertion = false,
+      // Kraken's viewportHeight options only works fine when viewportHeight is equal to window.physicalSize.height / window.devicePixelRatio.
+      // Maybe got unexpected error when change to other values, use this at your own risk!
+      // We will fixed this on next version release. (v0.6.0)
+      // Disable viewportHeight check and no assertion error report.
+      bool disableViewportHeightAssertion = false,
+      // Callback functions when loading Javascript scripts failed.
+      this.onLoadError,
+      this.animationController,
+      this.debugEnableInspector,
+      this.onJSError})
+      : super(key: key);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -144,10 +142,15 @@ class _KrakenRenderObjectWidget extends SingleChildRenderObjectWidget {
       PerformanceTiming.instance(0).mark(PERF_CONTROLLER_INIT_START);
     }
 
-    double viewportWidth = _krakenWidget.viewportWidth ?? window.physicalSize.width / window.devicePixelRatio;
-    double viewportHeight = _krakenWidget.viewportHeight ?? window.physicalSize.height / window.devicePixelRatio;
+    double viewportWidth =
+        _krakenWidget.viewportWidth ?? window.physicalSize.width / window.devicePixelRatio;
+    double viewportHeight =
+        _krakenWidget.viewportHeight ?? window.physicalSize.height / window.devicePixelRatio;
 
-    KrakenController controller = KrakenController(shortHash(_krakenWidget.hashCode), viewportWidth, viewportHeight,
+    KrakenController controller = KrakenController(
+      shortHash(_krakenWidget.hashCode),
+      viewportWidth,
+      viewportHeight,
       background: _krakenWidget.background,
       showPerformanceOverlay: Platform.environment[ENABLE_PERFORMANCE_OVERLAY] != null,
       bundleContent: _krakenWidget.bundleContent,
@@ -180,12 +183,14 @@ class _KrakenRenderObjectWidget extends SingleChildRenderObjectWidget {
 
     if (viewportWidthHasChanged) {
       controller.view.viewportWidth = _krakenWidget.viewportWidth;
-      controller.view.document.body.style.setProperty(WIDTH, controller.view.viewportWidth.toString() + 'px');
+      controller.view.document.body.style
+          .setProperty(WIDTH, controller.view.viewportWidth.toString() + 'px');
     }
 
     if (viewportHeightHasChanged) {
       controller.view.viewportHeight = _krakenWidget.viewportHeight;
-      controller.view.document.body.style.setProperty(HEIGHT, controller.view.viewportHeight.toString() + 'px');
+      controller.view.document.body.style
+          .setProperty(HEIGHT, controller.view.viewportHeight.toString() + 'px');
     }
 
     if (viewportWidthHasChanged || viewportHeightHasChanged) {
@@ -217,13 +222,15 @@ class _KrakenRenderObjectElement extends SingleChildRenderObjectElement {
 
     KrakenController controller = (renderObject as RenderObjectWithControllerMixin).controller;
 
-    if (controller.bundleContent == null && controller.bundlePath == null && controller.bundleURL == null) {
+    if (controller.bundleContent == null &&
+        controller.bundlePath == null &&
+        controller.bundleURL == null) {
       return;
     }
 
     await controller.loadBundle();
 
-    _evalBundle(controller, widget._krakenWidget.animationController);
+    await _evalBundle(controller, widget._krakenWidget.animationController);
   }
 
   @override
@@ -234,13 +241,12 @@ void _evalBundle(KrakenController controller, AnimationController animationContr
   // Execute JavaScript scripts will block the Flutter UI Threads.
   // Listen for animationController listener to make sure to execute Javascript after route transition had completed.
   if (animationController != null) {
-    animationController.addStatusListener((AnimationStatus status) {
+    animationController.addStatusListener((AnimationStatus status) async {
       if (status == AnimationStatus.completed) {
-        controller.evalBundle();
+        await controller.evalBundle();
       }
     });
   } else {
     await controller.evalBundle();
   }
 }
-

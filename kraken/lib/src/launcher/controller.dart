@@ -182,7 +182,8 @@ class KrakenViewController {
 
   // attach kraken's renderObject to an renderObject.
   void attachView(RenderObject parent, [RenderObject previousSibling]) {
-    _elementManager.attach(parent, previousSibling, showPerformanceOverlay: showPerformanceOverlay ?? false);
+    _elementManager.attach(parent, previousSibling,
+        showPerformanceOverlay: showPerformanceOverlay ?? false);
   }
 
   Window get window {
@@ -232,7 +233,8 @@ class KrakenViewController {
         node.toBlob(devicePixelRatio: devicePixelRatio).then((Uint8List bytes) {
           completer.complete(bytes);
         }).catchError((e, stack) {
-          String msg = 'toBlob: failed to export image data from element id: $eventTargetId. error: $e}.\n$stack';
+          String msg =
+              'toBlob: failed to export image data from element id: $eventTargetId. error: $e}.\n$stack';
           completer.completeError(Exception(msg));
         });
       } else {
@@ -249,7 +251,8 @@ class KrakenViewController {
     if (kProfileMode) {
       PerformanceTiming.instance(contextId).mark(PERF_CREATE_ELEMENT_START, uniqueId: id);
     }
-    Element result = _elementManager.createElement(id, nativePtr, tagName.toUpperCase(), null, null);
+    Element result =
+        _elementManager.createElement(id, nativePtr, tagName.toUpperCase(), null, null);
     if (kProfileMode) {
       PerformanceTiming.instance(contextId).mark(PERF_CREATE_ELEMENT_END, uniqueId: id);
     }
@@ -288,7 +291,8 @@ class KrakenViewController {
 
   void insertAdjacentNode(int targetId, String position, int childId) {
     if (kProfileMode) {
-      PerformanceTiming.instance(contextId).mark(PERF_INSERT_ADJACENT_NODE_START, uniqueId: targetId);
+      PerformanceTiming.instance(contextId)
+          .mark(PERF_INSERT_ADJACENT_NODE_START, uniqueId: targetId);
     }
     _elementManager.insertAdjacentNode(targetId, position, childId);
     if (kProfileMode) {
@@ -348,11 +352,13 @@ class KrakenViewController {
     _elementManager.removeTarget(getEventTargetById(id));
   }
 
-  void handleNavigationAction(String sourceUrl, String targetUrl, KrakenNavigationType navigationType) async {
+  void handleNavigationAction(
+      String sourceUrl, String targetUrl, KrakenNavigationType navigationType) async {
     KrakenNavigationAction action = KrakenNavigationAction(sourceUrl, targetUrl, navigationType);
 
     try {
-      KrakenNavigationActionPolicy policy = await navigationDelegate.dispatchDecisionHandler(action);
+      KrakenNavigationActionPolicy policy =
+          await navigationDelegate.dispatchDecisionHandler(action);
       if (policy == KrakenNavigationActionPolicy.cancel) return;
 
       switch (action.navigationType) {
@@ -535,7 +541,8 @@ class KrakenController {
     _module.dispose();
     _view.detachView();
     Inspector.prevInspector = view._elementManager.controller.view.inspector;
-    _view = KrakenViewController(view._elementManager.viewportWidth, view._elementManager.viewportHeight,
+    _view = KrakenViewController(
+        view._elementManager.viewportWidth, view._elementManager.viewportHeight,
         showPerformanceOverlay: _view.showPerformanceOverlay,
         enableDebug: _view.enableDebug,
         contextId: _view.contextId,
@@ -566,7 +573,8 @@ class KrakenController {
 
     Inspector.prevInspector = view._elementManager.controller.view.inspector;
 
-    _view = KrakenViewController(view._elementManager.viewportWidth, view._elementManager.viewportHeight,
+    _view = KrakenViewController(
+        view._elementManager.viewportWidth, view._elementManager.viewportHeight,
         background: _view.background,
         showPerformanceOverlay: _view.showPerformanceOverlay,
         enableDebug: _view.enableDebug,
@@ -625,11 +633,7 @@ class KrakenController {
   }
 
   // preload javascript source and cache it.
-  void loadBundle({
-    String bundleContent,
-    String bundlePath,
-    String bundleURL
-  }) async {
+  void loadBundle({String bundleContent, String bundlePath, String bundleURL}) async {
     assert(!_view._disposed, "Kraken have already disposed");
 
     if (kProfileMode) {
@@ -685,7 +689,6 @@ class KrakenController {
           onLoad(this);
         });
       }
-
     }
   }
 }
